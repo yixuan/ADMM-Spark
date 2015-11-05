@@ -6,14 +6,19 @@ import scala.util.control._
 
 // Minimize
 //     -loglik(beta) + lambda/2 * ||beta-v||^2
-class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double],
-                    val lambda: Double, val v: DenseVector[Double]) {
+class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
+    val dim_n = x.rows
+    val dim_p = x.cols
+
+    val xtx = 0.25 * x.t * x
+    val Hinv = inv(xtx)
+
     var max_iter: Int = 100
     var eps_abs: Double = 1e-6
     var eps_rel: Double = 1e-6
 
-    val dim_n = x.rows
-    val dim_p = x.cols
+    var lambda: Double = 0.0
+    var v: DenseVector[Double] = DenseVector.zeros[Double](dim_p)
 
     val bhat = DenseVector.zeros[Double](dim_p)
     var iter = 0
@@ -29,13 +34,20 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double],
         this.eps_rel = eps_rel
     }
 
-    def run() {
+    def set_lambda(lambda: Double) {
+        this.lambda = lambda
+
         // Hessian = X'WX + lambda * I
         // To simplify computation, use 0.25*I to replace W
         // 0.25*I >= W, in the sense that 0.25*I - W is p.d.
-        val H = 0.25 * x.t * x + lambda * DenseMatrix.eye[Double](dim_p)
-        val Hinv = inv(H)
+        Hinv := inv(xtx + lambda * DenseMatrix.eye[Double](dim_p))
+    }
 
+    def set_v(v: DenseVector[Double]) {
+        this.v = v
+    }
+
+    def run() {
         bhat := 0.0
 
         val loop = new Breaks
