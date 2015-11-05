@@ -13,13 +13,13 @@ abstract class ADMML1(val dim_x: Int) {
     private var max_iter: Int = 100
     private var eps_abs: Double = 1e-6
     private var eps_rel: Double = 1e-6
-    private var rho: Double = 1.0
+    protected var rho: Double = 1.0
     // Main variable
-    private val admm_x = DenseVector.zeros[Double](dim_x)
+    protected val admm_x = DenseVector.zeros[Double](dim_x)
     // Auxiliary variable
-    private var admm_z = new VectorBuilder[Double](dim_x).toSparseVector
+    protected var admm_z = new VectorBuilder[Double](dim_x).toSparseVector
     // Dual variable
-    private val admm_y = DenseVector.zeros[Double](dim_x)
+    protected val admm_y = DenseVector.zeros[Double](dim_x)
     // Number of iterations
     private var iter = 0
     // Residuals and tolerance
@@ -59,7 +59,7 @@ abstract class ADMML1(val dim_x: Int) {
         return rho * norm(new_z - admm_z)
     }
     // Update x -- abstract method
-    def update_x()
+    protected def update_x()
 
     def set_opts(max_iter: Int, eps_abs: Double, eps_rel: Double, rho: Double) {
         this.max_iter = max_iter
