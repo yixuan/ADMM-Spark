@@ -5,15 +5,15 @@ import breeze.numerics._
 import scala.util.control._
 
 class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
-    var max_iter: Int = 100
-    var eps_abs: Double = 1e-6
-    var eps_rel: Double = 1e-6
+    private var max_iter: Int = 100
+    private var eps_abs: Double = 1e-6
+    private var eps_rel: Double = 1e-6
 
-    val dim_n = x.rows
-    val dim_p = x.cols
+    private val dim_n = x.rows
+    private val dim_p = x.cols
 
-    val bhat = DenseVector.zeros[Double](dim_p)
-    var iter = 0
+    private val bhat = DenseVector.zeros[Double](dim_p)
+    private var iter = 0
 
     // pi(x, b) = 1 / (1 + exp(-x * b))
     private def pi(x: DenseMatrix[Double], b: DenseVector[Double]): DenseVector[Double] = {
@@ -32,7 +32,6 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
 
         bhat := 0.0
 
-        val i = 0
         val loop = new Breaks
         loop.breakable {
             for(i <- 0 until max_iter) {
