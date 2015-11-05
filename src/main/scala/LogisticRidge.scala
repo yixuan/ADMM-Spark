@@ -7,21 +7,22 @@ import scala.util.control._
 // Minimize
 //     -loglik(beta) + lambda/2 * ||beta-v||^2
 class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
-    val dim_n = x.rows
-    val dim_p = x.cols
-
-    val xtx = 0.25 * x.t * x
-    val Hinv = inv(xtx)
-
-    var max_iter: Int = 100
-    var eps_abs: Double = 1e-6
-    var eps_rel: Double = 1e-6
-
-    var lambda: Double = 0.0
-    var v: DenseVector[Double] = DenseVector.zeros[Double](dim_p)
-
-    val bhat = DenseVector.zeros[Double](dim_p)
-    var iter = 0
+    // Dimension constants
+    private val dim_n = x.rows
+    private val dim_p = x.cols
+    // Penalty parameters
+    private var lambda: Double = 0.0
+    private var v: DenseVector[Double] = DenseVector.zeros[Double](dim_p)
+    // Parameters related to convergence
+    private var max_iter: Int = 100
+    private var eps_abs: Double = 1e-6
+    private var eps_rel: Double = 1e-6
+    // Variables to be returned
+    private val bhat = DenseVector.zeros[Double](dim_p)
+    private var iter = 0
+    // Intermediate results that can be cached
+    private val xtx = 0.25 * x.t * x
+    private val Hinv = inv(xtx)
 
     // pi(x, b) = 1 / (1 + exp(-x * b))
     private def pi(x: DenseMatrix[Double], b: DenseVector[Double]): DenseVector[Double] = {
