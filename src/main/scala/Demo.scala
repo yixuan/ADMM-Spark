@@ -38,10 +38,30 @@ object Demo {
         val f = "other/data.txt"
         val (x, y) = read_data(f)
 
-        // Build model
-        val mod = new Logistic(x, y)
-        mod.run()
-        println(mod.coef)
-        println("# of iterations: " + mod.niter)
+        println("\n===== Model 1: vanilla logistic regression =====\n")
+        val mod1 = new Logistic(x, y)
+        mod1.run()
+        println(mod1.coef)
+        println("# of iterations: " + mod1.niter)
+
+        println("\n===== Model 2: vanilla logistic regression using ridge model =====\n")
+        val v = DenseVector.zeros[Double](x.cols)
+        val mod2 = new LogisticRidge(x, y, 0.0, v)
+        mod2.run()
+        println(mod2.coef)
+        println("# of iterations: " + mod2.niter)
+
+        println("\n===== Model 3: ridge logistic regression shrinking beta to zero =====\n")
+        val mod3 = new LogisticRidge(x, y, 2.0, v)
+        mod3.run()
+        println(mod3.coef)
+        println("# of iterations: " + mod3.niter)
+
+        println("\n===== Model 3: ridge logistic regression shrinking beta to one =====\n")
+        val v2 = DenseVector.ones[Double](x.cols)
+        val mod4 = new LogisticRidge(x, y, 2.0, v2)
+        mod4.run()
+        println(mod4.coef)
+        println("# of iterations: " + mod4.niter)
     }
 }
