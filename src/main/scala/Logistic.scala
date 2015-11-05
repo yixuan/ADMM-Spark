@@ -5,13 +5,14 @@ import breeze.numerics._
 import scala.util.control._
 
 class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
+    // Dimension constants
+    private val dim_n = x.rows
+    private val dim_p = x.cols
+    // Parameters related to convergence
     private var max_iter: Int = 100
     private var eps_abs: Double = 1e-6
     private var eps_rel: Double = 1e-6
-
-    private val dim_n = x.rows
-    private val dim_p = x.cols
-
+    // Variables to be returned
     private val bhat = DenseVector.zeros[Double](dim_p)
     private var iter = 0
 
