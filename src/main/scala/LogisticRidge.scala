@@ -67,6 +67,6 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
         }
     }
 
-    def coef = bhat
+    def coef = bhat.copy
     def niter = iter
 }
