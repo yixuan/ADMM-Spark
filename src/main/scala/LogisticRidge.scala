@@ -38,7 +38,6 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double],
 
         bhat := 0.0
 
-        val i = 0
         val loop = new Breaks
         loop.breakable {
             for(i <- 0 until max_iter) {
