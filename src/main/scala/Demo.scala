@@ -67,7 +67,8 @@ object Demo {
         println("# of iterations: " + mod4.niter)
 
         println("\n===== Model 5: logistic lasso =====\n")
-        val mod5 = new LogisticLasso(x, y, 2.0)
+        val mod5 = new LogisticLasso(x, y)
+        mod5.set_lambda(2.0)
         mod5.run()
         println(mod5.coef)
         println("# of iterations: " + mod5.niter)

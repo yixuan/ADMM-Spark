@@ -6,14 +6,15 @@ import scala.util.control._
 
 // Minimize
 //     -loglik(beta) + lambda * ||beta||_1
-class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double], val lambda: Double) {
+class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
+    val dim_n = x.rows
+    val dim_p = x.cols
+
     var max_iter: Int = 100
     var eps_abs: Double = 1e-6
     var eps_rel: Double = 1e-6
     var rho: Double = 1.0
-
-    val dim_n = x.rows
-    val dim_p = x.cols
+    var lambda: Double = 0.0
 
     val admm_x = DenseVector.zeros[Double](dim_p)
     var admm_z = new VectorBuilder[Double](dim_p).toSparseVector
@@ -44,6 +45,10 @@ class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double], val 
         this.eps_rel = eps_rel
     }
 
+    def set_lambda(lambda: Double) {
+        this.lambda = lambda
+    }
+
     def run() {
         val xsolver = new LogisticRidge(x, y)
         xsolver.set_lambda(rho)
@@ -67,6 +72,6 @@ class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double], val 
         }
     }
 
-    def coef = admm_z
+    def coef = admm_z.copy
     def niter = iter
 }
