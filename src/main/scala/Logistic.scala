@@ -13,6 +13,7 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
     val dim_p = x.cols
 
     val bhat = DenseVector.zeros[Double](dim_p)
+    var iter = 0
 
     // pi(x, b) = 1 / (1 + exp(-x * b))
     private def pi(x: DenseMatrix[Double], b: DenseVector[Double]): DenseVector[Double] = {
@@ -31,7 +32,7 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
 
         bhat := 0.0
 
-        var i = 0
+        val i = 0
         val loop = new Breaks
         loop.breakable {
             for(i <- 0 until max_iter) {
@@ -50,6 +51,8 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
                 // println("bhat =")
                 // println(bhat)
 
+                iter = i
+
                 val r = norm(delta)
 
                 if(r < eps_abs || r < eps_rel * norm(bhat)) {
@@ -60,4 +63,5 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
     }
 
     def coef = bhat
+    def niter = iter
 }
