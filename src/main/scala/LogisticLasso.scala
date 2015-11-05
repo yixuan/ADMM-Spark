@@ -45,11 +45,14 @@ class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double], val 
     }
 
     def run() {
+        val xsolver = new LogisticRidge(x, y)
+        xsolver.set_lambda(rho)
+
         val loop = new Breaks
         loop.breakable {
             for(i <- 0 until max_iter) {
                 val v = admm_z - admm_y / rho;
-                val xsolver = new LogisticRidge(x, y, rho, v)
+                xsolver.set_v(v)
                 xsolver.run()
                 admm_x := xsolver.coef
 
