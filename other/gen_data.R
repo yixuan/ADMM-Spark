@@ -15,4 +15,7 @@ coef(m1)
 m2 = glmnet(x, y, family = "binomial", standardize = FALSE, intercept = FALSE, alpha = 0)
 coef(m2, 2 / n, exact = TRUE)
 
+m3 = glmnet(x, y, family = "binomial", standardize = FALSE, intercept = FALSE)
+coef(m3, 2 / n, exact = TRUE)
+
 write.table(data.frame(y = y, x = x), "data.txt", col.names = FALSE, row.names = FALSE, sep = " ")

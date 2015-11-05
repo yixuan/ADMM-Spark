@@ -57,11 +57,17 @@ object Demo {
         println(mod3.coef)
         println("# of iterations: " + mod3.niter)
 
-        println("\n===== Model 3: ridge logistic regression shrinking beta to one =====\n")
+        println("\n===== Model 4: ridge logistic regression shrinking beta to one =====\n")
         val v2 = DenseVector.ones[Double](x.cols)
         val mod4 = new LogisticRidge(x, y, 2.0, v2)
         mod4.run()
         println(mod4.coef)
         println("# of iterations: " + mod4.niter)
+
+        println("\n===== Model 5: logistic lasso =====\n")
+        val mod5 = new LogisticLasso(x, y, 2.0)
+        mod5.run()
+        println(mod5.coef)
+        println("# of iterations: " + mod5.niter)
     }
 }
