@@ -70,7 +70,7 @@ object Demo {
         val mod5 = new LogisticLasso(x, y)
         mod5.set_lambda(2.0)
         mod5.run()
-        println(mod5.coef)
+        println(mod5.coef.toDenseVector)
         println("# of iterations: " + mod5.niter)
     }
 }
