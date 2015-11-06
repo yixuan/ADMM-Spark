@@ -28,26 +28,35 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
     }
 
     def run() {
-        val xx = x.t * x
-        val Hinv = inv(-0.25 * xx)
+        // Hessian = X'WX
+        // To simplify computation, use 0.25*I to replace W
+        // 0.25*I >= W, in the sense that 0.25*I - W is p.d.
+        val H = 0.25 * x.t * x
+        val solver = new Cholesky(H)
 
         bhat := 0.0
+
+        // Intermediate results
+        val mu = DenseVector.zeros[Double](dim_n)
+        val grad = DenseVector.zeros[Double](dim_p)
+        val delta = DenseVector.zeros[Double](dim_p)
 
         val loop = new Breaks
         loop.breakable {
             for(i <- 0 until max_iter) {
                 // println("\n*** Iter " + i + "\n")
-                val mu = pi(x, bhat)
+                mu := pi(x, bhat)
 
-                val grad = x.t * (y - mu)
+                grad := x.t * (y - mu)
                 // println("grad =")
                 // println(grad)
 
-                val delta = Hinv * grad
+                // val delta = Hinv * grad
+                solver.solve(grad, delta)
                 // println("delta =")
                 // println(delta)
 
-                bhat -= delta
+                bhat += delta
                 // println("bhat =")
                 // println(bhat)
 
