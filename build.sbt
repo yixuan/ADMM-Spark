@@ -4,6 +4,8 @@ lazy val root = (project in file(".")).
     version := "1.0",
     scalaVersion := "2.11.7",
     libraryDependencies  ++= Seq(
+      "org.ejml" % "core" % "0.28",
+      "org.ejml" % "dense64" % "0.28",
       // other dependencies here
       "org.scalanlp" %% "breeze" % "0.11.2",
       // native libraries are not included by default. add this if you want them (as of 0.7)
