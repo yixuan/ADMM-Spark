@@ -31,13 +31,14 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
         // Hessian = X'WX
         // To simplify computation, use 0.25*I to replace W
         // 0.25*I >= W, in the sense that 0.25*I - W is p.d.
-        val H = 0.25 * x.t * x
+        val H = x.t * x
         val solver = new Cholesky(H)
 
         bhat := 0.0
 
         // Intermediate results
         val mu = DenseVector.zeros[Double](dim_n)
+        val w = DenseVector.zeros[Double](dim_n)
         val grad = DenseVector.zeros[Double](dim_p)
         val delta = DenseVector.zeros[Double](dim_p)
 
@@ -46,6 +47,7 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
             for(i <- 0 until max_iter) {
                 // println("\n*** Iter " + i + "\n")
                 mu := pi(x, bhat)
+                w := mu :* (1.0 - mu)
 
                 grad := x.t * (y - mu)
                 // println("grad =")
@@ -56,7 +58,7 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
                 // println("delta =")
                 // println(delta)
 
-                bhat += delta
+                bhat += delta / max(w)
                 // println("bhat =")
                 // println(bhat)
 
@@ -64,7 +66,7 @@ class Logistic(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
 
                 val r = norm(delta)
 
-                if(r < eps_abs || r < eps_rel * norm(bhat)) {
+                if(r < eps_abs * math.sqrt(dim_p) || r < eps_rel * norm(bhat)) {
                     loop.break
                 }
             }
