@@ -11,7 +11,7 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
     private val dim_n = x.rows
     private val dim_p = x.cols
     // Penalty parameters
-    private var lambda: Double = 0.0
+    private var lambda: Double = -1.0
     private var v: DenseVector[Double] = DenseVector.zeros[Double](dim_p)
     // Parameters related to convergence
     private var max_iter: Int = 100
@@ -21,8 +21,8 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
     private val bhat = DenseVector.zeros[Double](dim_p)
     private var iter = 0
     // Intermediate results that can be cached
-    private val xtx = 0.25 * x.t * x
-    private val Hinv = inv(xtx)
+    private val H0 = 0.25 * x.t * x
+    private val solver = new Cholesky(dim_p)
 
     // pi(x, b) = 1 / (1 + exp(-x * b))
     private def pi(x: DenseMatrix[Double], b: DenseVector[Double]): DenseVector[Double] = {
@@ -41,7 +41,10 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
         // Hessian = X'WX + lambda * I
         // To simplify computation, use 0.25*I to replace W
         // 0.25*I >= W, in the sense that 0.25*I - W is p.d.
-        Hinv := inv(xtx + lambda * DenseMatrix.eye[Double](dim_p))
+        val H = H0.copy
+        for(i <- 0 until dim_p)
+            H(i, i) = H(i, i) + lambda
+        solver.compute(H)
     }
 
     def set_v(v: DenseVector[Double]) {
@@ -49,6 +52,9 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
     }
 
     def run() {
+        if(lambda < 0)
+            set_lambda(0.0)
+
         bhat := 0.0
 
         val loop = new Breaks
@@ -57,7 +63,7 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
                 val mu = pi(x, bhat)
                 // Gradient = -X'(y-mu) + lambda*(beta-v)
                 val grad = x.t * (mu - y) + lambda * (bhat - v)
-                val delta = Hinv * grad
+                val delta = solver.solve(grad)
                 bhat -= delta
                 iter = i
                 val r = norm(delta)
