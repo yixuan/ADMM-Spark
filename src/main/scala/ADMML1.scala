@@ -10,7 +10,7 @@ abstract class ADMML1(val dim_x: Int) {
     // Penalty parameter
     private var lambda: Double = 0.0
     // Parameters related to convergence
-    private var max_iter: Int = 100
+    private var max_iter: Int = 1000
     private var eps_abs: Double = 1e-6
     private var eps_rel: Double = 1e-6
     protected var rho: Double = 1.0
@@ -61,7 +61,8 @@ abstract class ADMML1(val dim_x: Int) {
     // Update x -- abstract method
     protected def update_x()
 
-    def set_opts(max_iter: Int, eps_abs: Double, eps_rel: Double, rho: Double) {
+    def set_opts(max_iter: Int = 1000, eps_abs: Double = 1e-6, eps_rel: Double = 1e-6,
+                 rho: Double = 1) {
         this.max_iter = max_iter
         this.eps_abs = eps_abs
         this.eps_rel = eps_rel

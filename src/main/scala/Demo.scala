@@ -69,6 +69,7 @@ object Demo {
         println("\n===== Model 5: logistic lasso =====\n")
         val mod5 = new LogisticLasso(x, y)
         mod5.set_lambda(2.0)
+        mod5.set_opts(1000, 1e-3, 1e-3)
         mod5.run()
         println(mod5.coef.toDenseVector)
         println("# of iterations: " + mod5.niter)

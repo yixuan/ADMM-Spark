@@ -21,7 +21,7 @@ class LogisticNewton(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
         return 1.0 / (exp(- x * b) + 1.0)
     }
 
-    def set_opts(max_iter: Int, eps_abs: Double, eps_rel: Double) {
+    def set_opts(max_iter: Int = 100, eps_abs: Double = 1e-6, eps_rel: Double = 1e-6) {
         this.max_iter = max_iter
         this.eps_abs = eps_abs
         this.eps_rel = eps_rel
