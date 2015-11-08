@@ -67,7 +67,7 @@ class LogisticRidge(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
                 bhat -= delta
                 iter = i
                 val r = norm(delta)
-                if(r < eps_abs || r < eps_rel * norm(bhat)) {
+                if(r < eps_abs * math.sqrt(dim_p) || r < eps_rel * norm(bhat)) {
                     loop.break
                 }
             }
