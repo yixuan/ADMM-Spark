@@ -11,12 +11,22 @@ class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double])
 
     private val xsolver = new LogisticRidge(x, y)
     xsolver.set_lambda(rho)
-    xsolver.set_opts(100, 1e-3, 1e-3)
+    xsolver.set_opts(100, 1e-2, 1e-2)
 
     protected def update_x() {
         val v = admm_z - admm_y / rho;
         xsolver.set_v(v)
         xsolver.run()
         admm_x := xsolver.coef
+    }
+
+    override protected def logging(iter: Int) {
+        if(iter % 10 == 0) {
+            val xb = x * admm_z.toDenseVector
+            val ll = sum((y :* xb) - log(exp(xb) + 1.0))
+            val penalty = lambda * sum(abs(admm_z))
+            val obj = -ll + penalty
+            println("Iteration #" + iter + ": obj = " + obj)
+        }
     }
 }

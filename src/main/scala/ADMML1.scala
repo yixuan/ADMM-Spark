@@ -8,12 +8,13 @@ import scala.util.control._
 //     loss(x) + lambda * ||x||_1
 abstract class ADMML1(val dim_x: Int) {
     // Penalty parameter
-    private var lambda: Double = 0.0
+    protected var lambda: Double = 0.0
     // Parameters related to convergence
     private var max_iter: Int = 1000
     private var eps_abs: Double = 1e-6
     private var eps_rel: Double = 1e-6
     protected var rho: Double = 1.0
+    private var logs: Boolean = false
     // Main variable
     protected val admm_x = DenseVector.zeros[Double](dim_x)
     // Auxiliary variable
@@ -60,13 +61,15 @@ abstract class ADMML1(val dim_x: Int) {
     }
     // Update x -- abstract method
     protected def update_x()
+    protected def logging(iter: Int) {}
 
     def set_opts(max_iter: Int = 1000, eps_abs: Double = 1e-6, eps_rel: Double = 1e-6,
-                 rho: Double = 1) {
+                 rho: Double = 1, logs: Boolean = false) {
         this.max_iter = max_iter
         this.eps_abs = eps_abs
         this.eps_rel = eps_rel
         this.rho = rho
+        this.logs = logs
     }
 
     def set_lambda(lambda: Double) {
@@ -95,6 +98,9 @@ abstract class ADMML1(val dim_x: Int) {
                 admm_y :+= rho * resid
 
                 iter = i
+
+                if(logs)
+                    logging(iter)
 
                 // Convergence test
                 if(resid_primal < eps_primal && resid_dual < eps_dual) {
