@@ -38,40 +38,85 @@ object Demo {
         val f = "other/data.txt"
         val (x, y) = read_data(f)
 
+        {
         println("\n===== Model 1: vanilla logistic regression =====\n")
-        val mod1 = new Logistic(x, y)
-        mod1.run()
-        println(mod1.coef)
-        println("# of iterations: " + mod1.niter)
+        val mod = new Logistic(x, y)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
 
-        println("\n===== Model 2: vanilla logistic regression using ridge model =====\n")
-        val mod2 = new LogisticRidge(x, y)
-        mod2.run()
-        println(mod2.coef)
-        println("# of iterations: " + mod2.niter)
+        {
+        println("\n===== Model 2: vanilla logistic regression using Newton's method =====\n")
+        val mod = new LogisticNewton(x, y)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
 
-        println("\n===== Model 3: ridge logistic regression shrinking beta to zero =====\n")
-        val mod3 = new LogisticRidge(x, y)
-        mod3.set_lambda(2.0)
-        mod3.run()
-        println(mod3.coef)
-        println("# of iterations: " + mod3.niter)
+        {
+        println("\n===== Model 3: vanilla logistic regression using ridge model =====\n")
+        val mod = new LogisticRidge(x, y)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
 
-        println("\n===== Model 4: ridge logistic regression shrinking beta to one =====\n")
+        {
+        println("\n===== Model 4: vanilla logistic regression using ridge model and Newton's method =====\n")
+        val mod = new LogisticRidgeNewton(x, y)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
+
+        {
+        println("\n===== Model 5: ridge logistic regression shrinking beta to zero =====\n")
+        val mod = new LogisticRidge(x, y)
+        mod.set_lambda(2.0)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
+
+        {
+        println("\n===== Model 6: ridge logistic regression shrinking beta to zero using Newton's method =====\n")
+        val mod = new LogisticRidgeNewton(x, y)
+        mod.set_lambda(2.0)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
+
+        {
+        println("\n===== Model 7: ridge logistic regression shrinking beta to one =====\n")
         val ones = DenseVector.ones[Double](x.cols)
-        val mod4 = new LogisticRidge(x, y)
-        mod4.set_lambda(2.0)
-        mod4.set_v(ones)
-        mod4.run()
-        println(mod4.coef)
-        println("# of iterations: " + mod4.niter)
+        val mod = new LogisticRidge(x, y)
+        mod.set_lambda(2.0)
+        mod.set_v(ones)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
 
+        {
+        println("\n===== Model 8: ridge logistic regression shrinking beta to one using Newton's method =====\n")
+        val ones = DenseVector.ones[Double](x.cols)
+        val mod = new LogisticRidgeNewton(x, y)
+        mod.set_lambda(2.0)
+        mod.set_v(ones)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
+
+        {
         println("\n===== Model 5: logistic lasso =====\n")
-        val mod5 = new LogisticLasso(x, y)
-        mod5.set_lambda(2.0)
-        mod5.set_opts(1000, 1e-3, 1e-3)
-        mod5.run()
-        println(mod5.coef.toDenseVector)
-        println("# of iterations: " + mod5.niter)
+        val mod = new LogisticLasso(x, y)
+        mod.set_lambda(2.0)
+        mod.run()
+        println(mod.coef.toDenseVector)
+        println("# of iterations: " + mod.niter)
+        }
     }
 }
