@@ -38,11 +38,11 @@ class LogisticNewton(val x: DenseMatrix[Double], val y: DenseVector[Double]) {
         loop.breakable {
             for(i <- 0 until max_iter) {
                 val mu = pi(x, bhat)
-                val w = sqrt(mu :* (1.0 - mu))
+                val w = mu :* (1.0 - mu)
                 val grad = x.t * (y - mu)
 
                 val wx = x(::, *) :* w
-                val solver = new Cholesky(wx.t * wx)
+                val solver = new Cholesky(x.t * wx)
                 solver.solve(grad, delta)
 
                 bhat += delta
