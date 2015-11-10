@@ -6,10 +6,6 @@ import breeze.numerics._
 import breeze.stats.distributions._
 
 object Demo {
-    private def pi(x: DenseMatrix[Double], b: DenseVector[Double]): DenseVector[Double] = {
-        return 1.0 / (exp(- x * b) + 1.0)
-    }
-
     private def read_data(f: String): (DenseMatrix[Double], DenseVector[Double]) = {
         var source = Source.fromFile(f)
         val lines = source.getLines()
@@ -34,7 +30,7 @@ object Demo {
         return (x, y)
     }
 
-    def main(args: Array[String]) {
+    private def test_small() {
         val f = "other/data.txt"
         val (x, y) = read_data(f)
 
@@ -127,5 +123,20 @@ object Demo {
         println(mod.coef.toDenseVector)
         println("# of iterations: " + mod.niter)
         }
+    }
+
+    private def test_large() {
+        val f = "other/data_large.txt"
+        val (x, y) = read_data(f)
+        val mod = new LogisticLasso(x, y)
+        mod.set_opts(1000, 1e-3, 1e-3, logs = true)
+        mod.set_lambda(100.0)
+        mod.run()
+        println(mod.coef.toDenseVector)
+        println("# of iterations: " + mod.niter)
+    }
+
+    def main(args: Array[String]) {
+        test_large()
     }
 }
