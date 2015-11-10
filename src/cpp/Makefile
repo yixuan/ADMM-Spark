@@ -1,6 +1,7 @@
 JAVA_INCLUDE = /usr/lib/jvm/java/include
 EIGEN_INCLUDE = .
 LIBNAME = logistic_ridge.so
+RESOURCE = ../main/resources/$(LIBNAME)
 
 CXX = g++
 CXXFLAGS = -O3 -fPIC -msse4
@@ -17,3 +18,4 @@ all: $(LIBNAME)
 
 $(LIBNAME): $(OBJ)
 	$(CXX) $(LDFLAGS) -shared -o $@ $^
+	cp $@ $(RESOURCE)

@@ -1,3 +1,5 @@
+lazy val make = taskKey[Unit]("Make dynamic library from C++ code")
+
 lazy val root = (project in file(".")).
   settings(
     name := "admm",
@@ -23,4 +25,10 @@ lazy val root = (project in file(".")).
       "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
       "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"
     )
+  ).
+  settings(
+    make := {
+      println("Make dynamic library from C++ code")
+      "sh make.sh" !
+    }
   )
