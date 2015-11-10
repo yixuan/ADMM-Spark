@@ -59,6 +59,27 @@ abstract class ADMML1(val dim_x: Int) {
     private def compute_resid_dual(new_z: SparseVector[Double]): Double = {
         return rho * norm(new_z - admm_z)
     }
+    // Changing rho
+    protected def rho_changed_action() {}
+    private def update_rho() {
+        if(resid_primal / eps_primal > 10 * resid_dual / eps_dual) {
+            rho *= 2
+            rho_changed_action()
+        } else if(resid_dual / eps_dual > 10 * resid_primal / eps_primal) {
+            rho /= 2
+            rho_changed_action()
+        }
+
+        if(resid_primal < eps_primal) {
+            rho /= 1.2
+            rho_changed_action()
+        }
+
+        if(resid_dual < eps_dual) {
+            rho *= 1.2
+            rho_changed_action()
+        }
+    }
     // Update x -- abstract method
     protected def update_x()
     protected def logging(iter: Int) {}
@@ -106,6 +127,9 @@ abstract class ADMML1(val dim_x: Int) {
                 if(resid_primal < eps_primal && resid_dual < eps_dual) {
                     loop.break
                 }
+
+                if(i > 3)
+                    update_rho()
             }
         }
     }

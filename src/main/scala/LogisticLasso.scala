@@ -11,7 +11,11 @@ class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double])
 
     private val xsolver = new LogisticRidgeNative(x, y)
     xsolver.set_lambda(rho)
-    xsolver.set_opts(100, 1e-2, 1e-2)
+    xsolver.set_opts(100, 1e-3, 1e-3)
+
+    override protected def rho_changed_action() {
+        xsolver.set_lambda(rho)
+    }
 
     protected def update_x() {
         val v = admm_z - admm_y / rho;
