@@ -10,7 +10,7 @@ extern "C" {
 /*
  * Class:     statr_stat598bd_LogisticRidgeNative
  * Method:    logistic_ridge
- * Signature: ([DII[D[DD[DIDD)[D
+ * Signature: ([DII[D[DD[DIDD[I)[D
  */
 JNIEXPORT jdoubleArray JNICALL Java_statr_stat598bd_LogisticRidgeNative_logistic_1ridge
   (JNIEnv *, jobject, jdoubleArray, jint, jint, jdoubleArray, jdoubleArray, jdouble, jdoubleArray, jint, jdouble, jdouble, jintArray);
