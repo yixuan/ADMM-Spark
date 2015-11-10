@@ -9,7 +9,7 @@ import scala.util.control._
 class LogisticLasso(val x: DenseMatrix[Double], val y: DenseVector[Double])
       extends ADMML1(x.cols) {
 
-    private val xsolver = new LogisticRidge(x, y)
+    private val xsolver = new LogisticRidgeNative(x, y)
     xsolver.set_lambda(rho)
     xsolver.set_opts(100, 1e-2, 1e-2)
 
