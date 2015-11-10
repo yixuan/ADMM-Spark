@@ -1,2 +1,5 @@
 project/*
 target/*
+src/cpp/Eigen/*
+*.o
+*.so
