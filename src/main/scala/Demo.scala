@@ -94,7 +94,16 @@ object Demo {
         }
 
         {
-        println("\n===== Model 8: ridge logistic regression shrinking beta to one =====\n")
+        println("\n===== Model 8: ridge logistic regression shrinking beta to zero using Newton's method and native code =====\n")
+        val mod = new LogisticRidgeNewtonNative(x, y)
+        mod.set_lambda(2.0)
+        mod.run()
+        println(mod.coef)
+        println("# of iterations: " + mod.niter)
+        }
+
+        {
+        println("\n===== Model 9: ridge logistic regression shrinking beta to one =====\n")
         val ones = DenseVector.ones[Double](x.cols)
         val mod = new LogisticRidge(x, y)
         mod.set_lambda(2.0)
@@ -105,7 +114,7 @@ object Demo {
         }
 
         {
-        println("\n===== Model 9: ridge logistic regression shrinking beta to one using Newton's method =====\n")
+        println("\n===== Model 10: ridge logistic regression shrinking beta to one using Newton's method =====\n")
         val ones = DenseVector.ones[Double](x.cols)
         val mod = new LogisticRidgeNewton(x, y)
         mod.set_lambda(2.0)
@@ -116,7 +125,7 @@ object Demo {
         }
 
         {
-        println("\n===== Model 10: logistic lasso =====\n")
+        println("\n===== Model 11: logistic lasso =====\n")
         val mod = new LogisticLasso(x, y)
         mod.set_lambda(2.0)
         mod.run()
