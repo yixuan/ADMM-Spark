@@ -6,9 +6,12 @@ lazy val root = (project in file(".")).
     version := "1.0",
     scalaVersion := "2.11.7",
     libraryDependencies  ++= Seq(
+      // Testing facility
+      "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
+      // For matrix decompisition using pure Java
       "org.ejml" % "core" % "0.28",
       "org.ejml" % "dense64" % "0.28",
-      // other dependencies here
+      // Matrix operations using Breeze
       "org.scalanlp" %% "breeze" % "0.11.2",
       // native libraries are not included by default. add this if you want them (as of 0.7)
       // native libraries greatly improve performance, but increase jar sizes.
