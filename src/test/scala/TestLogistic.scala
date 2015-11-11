@@ -15,7 +15,7 @@ class TestLogistic extends TestBase {
         info("# of iterations: " + mod.niter)
     }
 
-    test("Vanilla logistic regression using Newton's method ") {
+    test("Vanilla logistic regression using Newton's method") {
         val mod = new LogisticNewton(x, y)
         mod.run()
         info(format_vec(mod.coef))
