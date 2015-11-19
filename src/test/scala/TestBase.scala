@@ -30,6 +30,17 @@ abstract class TestBase extends FunSuite {
         return (x, y)
     }
 
+    def read_data_parts(f: String): (Array[DenseMatrix[Double]], Array[DenseVector[Double]]) = {
+        val (xall, yall) = read_data(f)
+        val n = xall.rows
+        val x1 = xall(0 until (n / 2), ::).copy
+        val x2 = xall((n / 2) until n, ::).copy
+        val y1 = yall(0 until (n / 2)).copy
+        val y2 = yall((n / 2) until n).copy
+
+        return (Array(x1, x2), Array(y1, y2))
+    }
+
     def format_vec(v: DenseVector[Double]): String = {
         return "vec[" + v.data.map(x => "%.3f".format(x)).mkString(", ") + "]"
     }

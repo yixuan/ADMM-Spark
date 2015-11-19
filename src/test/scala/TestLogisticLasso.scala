@@ -16,6 +16,17 @@ class TestLogisticLasso extends TestBase {
         info("# of iterations: " + mod.niter)
     }
 
+    test("Logistic lasso (parallel algorithm)") {
+        val f = "other/data.txt"
+        val (x, y) = read_data_parts(f)
+        val mod = new PLogisticLassoSingle(x, y)
+        mod.set_lambda(2.0)
+        mod.set_opts(100, 1e-3, 1e-3)
+        mod.run()
+        info(format_vec(mod.coef.toDenseVector))
+        info("# of iterations: " + mod.niter)
+    }
+
     test("Logistic lasso (large)") {
         val f = "other/data_large.txt"
         val (x, y) = read_data(f)
