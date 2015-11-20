@@ -1,4 +1,5 @@
 lazy val make = taskKey[Unit]("Make dynamic library from C++ code")
+lazy val jni = taskKey[Unit]("Generate JNI headers")
 
 lazy val root = (project in file(".")).
   settings(
@@ -19,11 +20,10 @@ lazy val root = (project in file(".")).
       // native libraries greatly improve performance, but increase jar sizes.
       // It also packages various blas implementations, which have licenses that may or may not
       // be compatible with the Apache License. No GPL code, as best I know.
-      "org.scalanlp" %% "breeze-natives" % "0.11.2" % "provided",
+      "org.scalanlp" %% "breeze-natives" % "0.11.2" % "provided"
       // the visualization library is distributed separately as well.
       // It depends on LGPL code.
       // "org.scalanlp" %% "breeze-viz" % "0.11.2"
-      "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly()
     ),
     resolvers ++= Seq(
       // other resolvers here
@@ -36,19 +36,10 @@ lazy val root = (project in file(".")).
     make := {
       println("Make dynamic library from C++ code")
       "sh make.sh" !
+    },
+    jni := {
+      "sh jni.sh" !
     }
   )
 
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false)
-
-// Excluding unwanted native code
-assemblyExcludedJars in assembly := {
-  val cp = (fullClasspath in assembly).value
-  cp filter {jar => jar.data.getName.startsWith("native_system-java") ||
-                    jar.data.getName.startsWith("netlib-native_system") ||
-                    jar.data.getName.contains("-win-") ||
-                    jar.data.getName.contains("-osx-") ||
-                    jar.data.getName.contains("-i686-") ||
-                    jar.data.getName.contains("armhf")
-  }
-}
