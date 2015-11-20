@@ -5,9 +5,11 @@ lazy val root = (project in file(".")).
     name := "admm",
     version := "1.0",
     scalaVersion := "2.11.7",
-    libraryDependencies  ++= Seq(
+    libraryDependencies ++= Seq(
       // Testing facility
       "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
+      // Spark core components
+      // "org.apache.spark" %% "spark-core" % "1.5.2"
       // For matrix decompisition using pure Java
       "org.ejml" % "core" % "0.28",
       "org.ejml" % "dense64" % "0.28",
