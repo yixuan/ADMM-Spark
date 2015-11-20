@@ -14,15 +14,16 @@ lazy val root = (project in file(".")).
       "org.ejml" % "core" % "0.28",
       "org.ejml" % "dense64" % "0.28",
       // Matrix operations using Breeze
-      "org.scalanlp" %% "breeze" % "0.11.2",
+      "org.scalanlp" %% "breeze" % "0.11.2" % "provided", // included by Spark
       // native libraries are not included by default. add this if you want them (as of 0.7)
       // native libraries greatly improve performance, but increase jar sizes.
       // It also packages various blas implementations, which have licenses that may or may not
       // be compatible with the Apache License. No GPL code, as best I know.
-      "org.scalanlp" %% "breeze-natives" % "0.11.2"
+      "org.scalanlp" %% "breeze-natives" % "0.11.2" % "provided",
       // the visualization library is distributed separately as well.
       // It depends on LGPL code.
       // "org.scalanlp" %% "breeze-viz" % "0.11.2"
+      "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly()
     ),
     resolvers ++= Seq(
       // other resolvers here
@@ -37,3 +38,17 @@ lazy val root = (project in file(".")).
       "sh make.sh" !
     }
   )
+
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false)
+
+// Excluding unwanted native code
+assemblyExcludedJars in assembly := {
+  val cp = (fullClasspath in assembly).value
+  cp filter {jar => jar.data.getName.startsWith("native_system-java") ||
+                    jar.data.getName.startsWith("netlib-native_system") ||
+                    jar.data.getName.contains("-win-") ||
+                    jar.data.getName.contains("-osx-") ||
+                    jar.data.getName.contains("-i686-") ||
+                    jar.data.getName.contains("armhf")
+  }
+}
