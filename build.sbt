@@ -43,3 +43,5 @@ lazy val root = (project in file(".")).
   )
 
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false)
+
+excludeFilter in unmanagedSources := HiddenFileFilter || "demo.scala"
