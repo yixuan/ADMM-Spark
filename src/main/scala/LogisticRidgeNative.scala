@@ -26,8 +26,6 @@ class LogisticRidgeNative(val x: DenseMatrix[Double], val y: DenseVector[Double]
     // Variables to be returned
     private val bhat = DenseVector.zeros[Double](dim_p)
     private var iter = 0
-    // Intermediate results that can be cached
-    private val H0 = 0.25 * x.t * x
 
     def set_opts(max_iter: Int = 100, eps_abs: Double = 1e-6, eps_rel: Double = 1e-6) {
         this.max_iter = max_iter
@@ -43,15 +41,14 @@ class LogisticRidgeNative(val x: DenseMatrix[Double], val y: DenseVector[Double]
         this.v = v
     }
 
-    @native def logistic_ridge(x: Array[Double], n: Int, p: Int,
-                               y: Array[Double], H0: Array[Double],
+    @native def logistic_ridge(x: Array[Double], n: Int, p: Int, y: Array[Double],
                                lambda: Double, v: Array[Double],
                                max_iter: Int, eps_abs: Double, eps_rel: Double,
                                niter: Array[Int]): Array[Double]
 
     def run() {
         val iter_arg = new Array[Int](1)
-        val res = logistic_ridge(x.data, dim_n, dim_p, y.data, H0.data,
+        val res = logistic_ridge(x.data, dim_n, dim_p, y.data,
                                  lambda, v.data, max_iter, eps_abs, eps_rel, iter_arg)
         bhat := DenseVector(res)
         iter = iter_arg(0)
