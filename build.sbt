@@ -7,10 +7,10 @@ lazy val root = (project in file(".")).
     scalaVersion := "2.11.7",
     libraryDependencies ++= Seq(
       // Testing facility
-      "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
+      "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
       // Spark core components
-      // "org.apache.spark" %% "spark-core" % "1.5.2"
-      // For matrix decompisition using pure Java
+      "org.apache.spark" %% "spark-core" % "1.5.2" % "provided",
+      // For matrix decomposition using pure Java
       "org.ejml" % "core" % "0.28",
       "org.ejml" % "dense64" % "0.28",
       // Matrix operations using Breeze
