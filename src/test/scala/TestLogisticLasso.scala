@@ -27,7 +27,7 @@ class TestLogisticLasso extends TestBase {
         info("# of iterations: " + mod.niter)
     }
 
-    test("Logistic lasso (large)") {
+    /* test("Logistic lasso (large)") {
         val f = "other/data_large.txt"
         val (x, y) = read_data(f)
         val mod = new LogisticLasso(x, y)
@@ -36,5 +36,5 @@ class TestLogisticLasso extends TestBase {
         mod.run()
         info(format_vec(mod.coef.toDenseVector))
         info("# of iterations: " + mod.niter)
-    }
+    } */
 }
