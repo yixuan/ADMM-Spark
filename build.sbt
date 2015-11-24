@@ -14,6 +14,8 @@ lazy val root = (project in file(".")).
       // For matrix decomposition using pure Java
       "org.ejml" % "core" % "0.28",
       "org.ejml" % "dense64" % "0.28",
+      // JNI loader
+      "com.github.fommil" % "jniloader" % "1.1",
       // Matrix operations using Breeze
       "org.scalanlp" %% "breeze" % "0.11.2" % "provided", // included by Spark
       // native libraries are not included by default. add this if you want them (as of 0.7)
