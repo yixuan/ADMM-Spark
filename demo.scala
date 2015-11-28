@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger
+import org.apache.log4j.Level
 import scala.io.Source
 import breeze.linalg._
 import breeze.numerics._
@@ -29,7 +31,15 @@ val datx = txt.mapPartitions(x => Array[DenseMatrix[Double]](read_x(x)).iterator
 daty.cache()
 datx.cache()
 
+Logger.getLogger("org").setLevel(Level.INFO);
+Logger.getLogger("akka").setLevel(Level.INFO);
+
 val model = new PLogisticLasso(datx, daty, sc)
+
+Logger.getLogger("org").setLevel(Level.WARN);
+Logger.getLogger("akka").setLevel(Level.WARN);
+
 model.set_lambda(2.0)
 model.set_opts(500, 1e-3, 1e-3, logs = true)
+
 model.run()
