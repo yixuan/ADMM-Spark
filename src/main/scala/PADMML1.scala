@@ -42,10 +42,10 @@ abstract class PADMML1(val datx: RDD[DenseMatrix[Double]],
     // Number of iterations
     private var iter = 0
     // Residuals and tolerance
-    private var eps_primal = 0.0;
-    private var eps_dual = 0.0;
-    private var resid_primal = 0.0;
-    private var resid_dual = 0.0;
+    protected var eps_primal = 0.0;
+    protected var eps_dual = 0.0;
+    protected var resid_primal = 0.0;
+    protected var resid_dual = 0.0;
 
     // Soft threshold
     private def soft_shreshold(vec: DenseVector[Double], penalty: Double): SparseVector[Double] = {
