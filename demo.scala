@@ -26,6 +26,9 @@ sc.addJar("target/scala-2.11/admm-assembly-1.0.jar")
 val daty = txt.mapPartitions(x => Array[DenseVector[Double]](read_y(x)).iterator)
 val datx = txt.mapPartitions(x => Array[DenseMatrix[Double]](read_x(x)).iterator)
 
+daty.cache()
+datx.cache()
+
 val model = new PLogisticLasso(datx, daty, sc)
 model.set_lambda(2.0)
 model.set_opts(500, 1e-3, 1e-3, logs = true)
