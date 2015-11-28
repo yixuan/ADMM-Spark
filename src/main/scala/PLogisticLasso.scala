@@ -26,6 +26,14 @@ class PLogisticLasso(datx: RDD[DenseMatrix[Double]],
         return xsolver.coef
     }
     override protected def logging(iter: Int) {
-        println("Iteration #" + iter + ": z = " + admm_z.toDenseVector)
+        // Print header
+        if (iter == 0) {
+            println("=" * 80)
+            println("%-7s%-15s%-15s%-15s%-15s%-15s".format("iter", "eps_primal", "resid_primal",
+                                                           "eps_dual", "resid_dual", "rho"))
+            println("-" * 80)
+        }
+        println("%-7d%-15f%-15f%-15f%-15f%-15f".format(iter, eps_primal, resid_primal,
+                                                       eps_dual, resid_dual, rho))
     }
 }

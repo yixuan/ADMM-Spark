@@ -24,8 +24,14 @@ class PLogisticLassoSingle(datx: Array[DenseMatrix[Double]],
         return xsolver.coef
     }
     override protected def logging(iter: Int) {
-        println("Iteration #" + iter + ": z = " + admm_z.toDenseVector)
-        println("          #" + iter + ": eps_p = " + eps_primal + ", res_p = " + resid_primal)
-        println("          #" + iter + ": eps_d = " + eps_dual + ", res_d = " + resid_dual)
+        // Print header
+        if (iter == 0) {
+            println("=" * 80)
+            println("%-7s%-15s%-15s%-15s%-15s%-15s".format("iter", "eps_primal", "resid_primal",
+                                                           "eps_dual", "resid_dual", "rho"))
+            println("-" * 80)
+        }
+        println("%-7d%-15f%-15f%-15f%-15f%-15f".format(iter, eps_primal, resid_primal,
+                                                       eps_dual, resid_dual, rho))
     }
 }
